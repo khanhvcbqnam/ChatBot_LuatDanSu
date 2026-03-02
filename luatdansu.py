@@ -15,7 +15,7 @@ except Exception:
 
 with st.sidebar:
     st.header("🔑 Cấu hình bảo mật")
-    if not api_key:
+    if not api_key or api_key == "your_openai_api_key_here":
         api_key = st.text_input("Sếp nhập OpenAI API Key vào đây nhé:", type="password")
         if api_key:
             st.success("Đã nhận khóa API! ✅")
@@ -24,8 +24,8 @@ with st.sidebar:
     else:
         st.success("Đã kết nối API từ hệ thống! ✅")
 
-# 1. Cấu hình OpenAI (Chỉ chạy khi có Key)
-if api_key:
+# 1. Cấu hình OpenAI (Chỉ chạy khi có Key hợp lệ)
+if api_key and api_key != "your_openai_api_key_here":
     client = OpenAI(api_key=api_key)
 
     # 2. Đọc hướng dẫn hệ thống (Persona)
@@ -45,8 +45,6 @@ if api_key:
         initial_msg = f"Em chào sếp Canhnho! 👋 Em đã sẵn sàng hỗ trợ sếp với trí tuệ {st.session_state.model_name}. Sếp cần em tư vấn hay tra cứu vấn đề gì không ạ?"
         st.session_state.messages.append({"role": "assistant", "content": initial_msg})
 
-    if "chat_session" not in st.session_state:
-        st.session_state.chat_session = model.start_chat(history=[])
 
     # 5. Giao diện chính
     st.title("⚖️ Trợ lý Luật Dân sự (OpenAI)")
